@@ -1,12 +1,15 @@
 // this is generic error format for all api errors
-import Error from "error";
 
-export default class ApiError extends Error {
-  constructor(statusCode, message, errorCode) {
+class ApiError extends Error {
+  constructor(statusCode, message, code = null) {
     super(message);
 
-    this.statusCode = statusCode;
     this.success = false;
-    this.errorCode = errorCode;
+
+    this.statusCode = statusCode;
+
+    this.code = code;
   }
 }
+
+export default ApiError;
