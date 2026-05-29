@@ -8,7 +8,8 @@ import mongoose from "mongoose";
 import errorMiddleware from "./middleware/error.middleware.js";
 import authRoutes from "./routes/auth.route.js";
 import connectDB from "./config/db.js";
-
+import dansalRoutes from "./routes/dansal.route.js";
+import cloudRoutes from "./routes/cloud.route.js";
 // configure
 dotenv.config();
 
@@ -19,11 +20,12 @@ const app = express();
 app.use(express.json());
 app.use(morgan("combined"));
 app.use(cors());
-app.use(errorMiddleware);
 
 // routes
 app.use("/api/auth", authRoutes);
-
+app.use("/api/dansals", dansalRoutes);
+app.use("/api/cloudinary", cloudRoutes);
+app.use(errorMiddleware);
 // port
 const PORT = process.env.PORT || 3000;
 

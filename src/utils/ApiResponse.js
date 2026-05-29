@@ -1,7 +1,7 @@
 // this is generic response format for all api responses
 
 class ApiResponse {
-  constructor(statusCode, data = null, message = "Success") {
+  constructor(statusCode, data = null, message = "Success", token = null) {
     this.success = true;
 
     this.statusCode = statusCode;
@@ -9,6 +9,8 @@ class ApiResponse {
     this.message = message;
 
     this.data = data;
+
+    this.token = token;
   }
 }
 

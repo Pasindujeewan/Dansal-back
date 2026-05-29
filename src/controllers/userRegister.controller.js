@@ -2,7 +2,11 @@ import User from "../models/user.model.js";
 import bcrypt from "bcrypt";
 import ApiResponse from "../utils/ApiResponse.js";
 import ApiError from "../utils/ApiError.js";
-import { generateToken } from "../utils/generateToken.js";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../utils/generateToken.js";
+import { hashToken } from "../utils/hashToken.js";
 
 export const registerUser = async (req, res, next) => {
   try {
@@ -23,14 +27,29 @@ export const registerUser = async (req, res, next) => {
       email,
       password: hashedPassword,
     });
+    //generate tokens
+    const accessToken = generateAccessToken({
+      userId: user._id,
+      email: user.email,
+    });
+    const refreshToken = generateRefreshToken({ userId: user._id });
+    // Save refreshToken in DB
+    user.refreshToken = hashToken(refreshToken);
+    await user.save();
 
-    //generate token
-    const token = generateToken({ userId: user._id, email: user.email });
+    // Remove sensitive fields before returning the user
+    const userData = user.toObject();
+    delete userData.password;
+    delete userData.refreshToken;
+    delete userData.__v;
 
     // Return the user
-    return res
-      .status(201)
-      .json(new ApiResponse(201, user, "User registered successfully"));
+    return res.status(201).json(
+      new ApiResponse(201, { user: userData }, "User registered successfully", {
+        accessToken,
+        refreshToken,
+      }),
+    );
   } catch (error) {
     return next(
       console.log(error),

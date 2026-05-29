@@ -1,19 +1,23 @@
 import mongoose from "mongoose";
 
 const dansalSchema = new mongoose.Schema({
-  title: {
+  type: {
     type: String,
-    required: true,
   },
   description: {
-    type: String,
-  },
-  type: {
     type: String,
   },
   location: {
     type: [Number], // [longitude, latitude]
     index: "2dsphere", // Geospatial index for location
+  },
+  imageUrl: {
+    type: String,
+    default: null,
+  },
+  queueLength: {
+    type: String,
+    default: null,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
