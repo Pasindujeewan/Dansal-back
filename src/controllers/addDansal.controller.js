@@ -3,7 +3,7 @@ import ApiError from "../utils/ApiError.js";
 import ApiResponse from "../utils/ApiResponse.js";
 export const addDansal = async (req, res) => {
   try {
-    const { description, type, queueLength, imageUrl, location } = req.body;
+    const { description, type, queueLength, imageUrl, coordinates } = req.body;
     const creatorId = req.user.userId; // Assuming the user ID is stored in req.user after authentication
 
     const newDansal = new Dansal({
@@ -11,7 +11,10 @@ export const addDansal = async (req, res) => {
       type,
       queueLength,
       imageUrl,
-      location,
+      location: {
+        type: "Point",
+        coordinates: [coordinates[0], coordinates[1]], // [longitude, latitude]
+      },
       createdBy: creatorId,
     });
 

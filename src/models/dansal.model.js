@@ -8,8 +8,16 @@ const dansalSchema = new mongoose.Schema({
     type: String,
   },
   location: {
-    type: [Number], // [longitude, latitude]
-    index: "2dsphere", // Geospatial index for location
+    type: {
+      type: String,
+      enum: ["Point"],
+      default: "Point",
+      required: true,
+    },
+    coordinates: {
+      type: [Number], // [longitude, latitude]
+      required: true,
+    },
   },
   imageUrl: {
     type: String,
@@ -25,5 +33,6 @@ const dansalSchema = new mongoose.Schema({
     required: true,
   },
 });
+dansalSchema.index({ location: "2dsphere" }); // Geospatial index for location
 
 export default mongoose.model("Dansal", dansalSchema);
