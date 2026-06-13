@@ -10,6 +10,7 @@ import authRoutes from "./routes/auth.route.js";
 import connectDB from "./config/db.js";
 import dansalRoutes from "./routes/dansal.route.js";
 import cloudRoutes from "./routes/cloud.route.js";
+import userRoutes from "./routes/user.route.js";
 // configure
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/dansals", dansalRoutes);
 app.use("/api/cloudinary", cloudRoutes);
+app.use("/api/user", userRoutes);
 app.use(errorMiddleware);
 // port
 const PORT = process.env.PORT || 3000;

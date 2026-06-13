@@ -18,7 +18,7 @@ export const getDansal = async (req, res) => {
     const formattedDansals = dansals.map((dansal) => ({
       id: dansal._id,
       type: dansal.type,
-      coordinates: dansal.location.coordinates,
+      location: dansal.location.coordinates,
     }));
     return res
       .status(200)

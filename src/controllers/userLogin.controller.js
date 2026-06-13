@@ -42,13 +42,27 @@ export const loginUser = async (req, res, next) => {
     const userData = user.toObject();
     delete userData.password;
     delete userData.refreshToken;
+    delete userData.createdAt;
+    delete userData.updatedAt;
+    delete userData.provider;
     delete userData.__v;
 
     return res.status(200).json(
-      new ApiResponse(200, { user: userData }, "User logged in successfully", {
-        accessToken,
-        refreshToken,
-      }),
+      new ApiResponse(
+        200,
+        {
+          user: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+          },
+        },
+        "User logged in successfully",
+        {
+          accessToken,
+          refreshToken,
+        },
+      ),
     );
   } catch (error) {
     console.error(error);

@@ -41,14 +41,28 @@ export const registerUser = async (req, res, next) => {
     const userData = user.toObject();
     delete userData.password;
     delete userData.refreshToken;
+    delete userData.createdAt;
+    delete userData.updatedAt;
+    delete userData.provider;
     delete userData.__v;
 
     // Return the user
     return res.status(201).json(
-      new ApiResponse(201, { user: userData }, "User registered successfully", {
-        accessToken,
-        refreshToken,
-      }),
+      new ApiResponse(
+        201,
+        {
+          user: {
+            id: user._id,
+            name: user.name,
+            email: user.email,
+          },
+        },
+        "User registered successfully",
+        {
+          accessToken,
+          refreshToken,
+        },
+      ),
     );
   } catch (error) {
     return next(
