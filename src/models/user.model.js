@@ -1,4 +1,3 @@
-import { Timestamp } from "mongodb";
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -14,7 +13,6 @@ const userSchema = new mongoose.Schema(
     },
     password: {
       type: String,
-      // empty for Google users
     },
     provider: {
       type: String,
@@ -25,6 +23,9 @@ const userSchema = new mongoose.Schema(
       type: String,
     },
     refreshToken: {
+      type: String,
+    },
+    notifyToken: {
       type: String,
     },
   },

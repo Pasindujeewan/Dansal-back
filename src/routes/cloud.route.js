@@ -1,8 +1,8 @@
 import express from "express";
-import generateSignature from "../middleware/generateSignature.js";
+import { createCloudinaryUploadSignature } from "../controllers/cloudinary.controller.js";
 
 const router = express.Router();
 
-router.get("/signature", generateSignature);
+router.get("/signature", createCloudinaryUploadSignature);
 
 export default router;

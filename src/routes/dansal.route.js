@@ -1,11 +1,16 @@
 import express from "express";
-import { addDansal } from "../controllers/addDansal.controller.js";
-import { verifyAccessToken } from "../middleware/verifyAccessToken.js";
-import { getDansal } from "../controllers/getDansal.controller.js";
+import {
+  createDansal,
+  getDansalById,
+  getDansalsInBounds,
+} from "../controllers/dansal.controller.js";
+import { verifyAccessToken } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
-// Define routes for dansals here
-router.post("/add", verifyAccessToken, addDansal);
-router.get("/get", getDansal);
+router.post("/add", verifyAccessToken, createDansal);
+
+router.get("/get", getDansalsInBounds);
+router.get("/get/:dansalId", getDansalById);
+
 export default router;

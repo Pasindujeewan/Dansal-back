@@ -1,10 +1,10 @@
-import cloudinary from "cloudinary";
-import ApiError from "../utils/ApiError.js";
-import ApiResponse from "../utils/ApiResponse.js";
+import cloudinary from "../config/cloudinary.js";
+import ApiError from "../utils/api-error.js";
+import ApiResponse from "../utils/api-response.js";
 
-const generateSignature = (req, res, next) => {
+export const createCloudinaryUploadSignature = (req, res, next) => {
   try {
-    const timestamp = Math.round(new Date().getTime() / 1000);
+    const timestamp = Math.round(Date.now() / 1000);
 
     const signature = cloudinary.utils.api_sign_request(
       {
@@ -34,4 +34,3 @@ const generateSignature = (req, res, next) => {
     );
   }
 };
-export default generateSignature;
