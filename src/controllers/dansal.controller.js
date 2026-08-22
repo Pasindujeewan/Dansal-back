@@ -96,7 +96,12 @@ const buildTileQuery = (tileKeys) => ({
   }),
 });
 
-const buildBoundsQuery = ({ northBound, southBound, eastBound, westBound }) => ({
+const buildBoundsQuery = ({
+  northBound,
+  southBound,
+  eastBound,
+  westBound,
+}) => ({
   location: {
     $geoWithin: {
       $box: [
@@ -141,13 +146,9 @@ export const createDansal = async (req, res, next) => {
       createdBy: req.user.userId,
     });
 
-    return res.status(201).json(
-      new ApiResponse(
-        201,
-        null,
-        "Dansal added successfully",
-      ),
-    );
+    return res
+      .status(201)
+      .json(new ApiResponse(201, null, "Dansal added successfully"));
   } catch (error) {
     console.error(error);
     return next(
@@ -213,13 +214,15 @@ export const getDansalsInBounds = async (req, res, next) => {
       .select("location type updatedAt")
       .lean();
 
-    return res.status(200).json(
-      new ApiResponse(
-        200,
-        { dansals: dansals.map(formatDansalMarker), syncedTiles: [] },
-        "Dansals fetched successfully",
-      ),
-    );
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { dansals: dansals.map(formatDansalMarker), syncedTiles: [] },
+          "Dansals fetched successfully",
+        ),
+      );
   } catch (error) {
     console.error(error);
     return next(
@@ -237,9 +240,9 @@ export const getDansalById = async (req, res, next) => {
       return next(new ApiError(404, "Dansal not found", "DANSAL_NOT_FOUND"));
     }
 
-    return res.status(200).json(
-      new ApiResponse(200, { dansal }, "Dansals fetched successfully"),
-    );
+    return res
+      .status(200)
+      .json(new ApiResponse(200, { dansal }, "Dansals fetched successfully"));
   } catch (error) {
     console.error(error);
     return next(
@@ -254,4 +257,36 @@ export const getUserDansals = async (userId) => {
   );
 
   return dansals.map(formatOwnedDansal);
+};
+
+export const searchDansals = async (req, res, next) => {
+  try {
+    const { type, distance, latitude, longitude } = req.query;
+    const dansals = await Dansal.find({
+      type: type,
+      location: {
+        $geoWithin: {
+          $centerSphere: [
+            [parseFloat(longitude), parseFloat(latitude)],
+            parseFloat(distance) / 6378.1, // Convert distance to radians (Earth radius in km)
+          ],
+        },
+      },
+    }).select("location type updatedAt");
+    console.log("Search result:", dansals);
+    return res
+      .status(200)
+      .json(
+        new ApiResponse(
+          200,
+          { dansals: dansals.map(formatDansalMarker) },
+          "Dansals fetched successfully",
+        ),
+      );
+  } catch (error) {
+    console.error(error);
+    return next(
+      new ApiError(500, "Failed to fetch dansals", "FETCH_DANSALS_ERROR"),
+    );
+  }
 };
