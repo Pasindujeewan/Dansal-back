@@ -16,7 +16,6 @@ const dansalSchema = new mongoose.Schema(
         required: true,
       },
       coordinates: {
-        // MongoDB GeoJSON expects [longitude, latitude], not [latitude, longitude].
         type: [Number],
         required: true,
       },

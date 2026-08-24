@@ -268,11 +268,11 @@ export const searchDansals = async (req, res, next) => {
         $geoWithin: {
           $centerSphere: [
             [parseFloat(longitude), parseFloat(latitude)],
-            parseFloat(distance) / 6378.1, // Convert distance to radians (Earth radius in km)
+            parseFloat(distance) / 6378.1, // Convert distance to radians
           ],
         },
       },
-    }).select("location type updatedAt");
+    }).select("location type");
     console.log("Search result:", dansals);
     return res
       .status(200)
