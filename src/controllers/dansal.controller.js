@@ -1,6 +1,7 @@
 import Dansal from "../models/dansal.model.js";
 import ApiError from "../utils/api-error.js";
 import ApiResponse from "../utils/api-response.js";
+import { analyzeDansalName } from "../services/geminiNameAnalze.js";
 
 //
 const MAP_TILE_SIZE_DEGREES = 0.02;
@@ -136,7 +137,7 @@ export const createDansal = async (req, res, next) => {
       );
     }
     let typeLabel = type;
-    let typeValue = "bath"; //to test
+    let typeValue = await analyzeDansalName(type);
 
     await Dansal.create({
       description,
