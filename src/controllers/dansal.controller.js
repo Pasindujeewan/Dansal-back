@@ -12,14 +12,16 @@ const getMarkerVersion = (dansal) => {
 
 const formatDansalMarker = (dansal) => ({
   id: dansal._id.toString(),
-  type: dansal.type,
+  label: dansal.type.label,
+  value: dansal.type.value,
   location: dansal.location.coordinates,
   updatedAt: getMarkerVersion(dansal).toISOString(),
 });
 
 const formatOwnedDansal = (dansal) => ({
   id: dansal._id,
-  type: dansal.type,
+  label: dansal.type.label,
+  value: dansal.type.value,
   description: dansal.description,
   imageUrl: dansal.imageUrl,
   location: dansal.location.coordinates,
@@ -133,10 +135,15 @@ export const createDansal = async (req, res, next) => {
         ),
       );
     }
+    let typeLabel = type;
+    let typeValue = "bath"; //to test
 
     await Dansal.create({
       description,
-      type,
+      type: {
+        label: typeLabel,
+        value: typeValue,
+      },
       queueLength,
       imageUrl,
       location: {
@@ -264,7 +271,7 @@ export const searchDansals = async (req, res, next) => {
   try {
     const { type, distance, latitude, longitude } = req.query;
     const dansals = await Dansal.find({
-      type: type,
+      [`type.value`]: type,
       location: {
         $geoWithin: {
           $centerSphere: [

@@ -1,0 +1,16 @@
+export const allowedDansalTypes = [
+  "bath",
+  "rice_curry",
+  "ice_cream",
+  "paan",
+  "tea_drinks",
+  "soup",
+  "fruit",
+  "biscuit",
+  "beema",
+  "belimal",
+  "milk",
+  "kos",
+  "mannokka",
+  "other",
+];

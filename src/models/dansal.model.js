@@ -1,9 +1,18 @@
 import mongoose from "mongoose";
+import { allowedDansalTypes } from "../constants/allowedDansal.js";
 
 const dansalSchema = new mongoose.Schema(
   {
     type: {
-      type: String,
+      label: {
+        type: String,
+        required: true,
+      },
+      value: {
+        type: String,
+        required: true,
+        enum: allowedDansalTypes,
+      },
     },
     description: {
       type: String,
